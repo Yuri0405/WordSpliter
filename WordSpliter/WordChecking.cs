@@ -40,13 +40,11 @@ namespace WordSpliter
                     sublenth++;
                     substring = text.Substring(parseCounter, sublenth);
 
-                    foreach (string word in _dictionary)
-                    {
-                        if (substring == word)
-                        {
+                   if (_dictionary.Contains(substring))
+                   {
                             substrings.Push(substring);
-                        }
-                    }
+                   }
+                    
                 }
                 if(substrings.Count == 0)
                 {

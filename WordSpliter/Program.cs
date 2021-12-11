@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 
 
 namespace WordSpliter
@@ -17,29 +18,42 @@ namespace WordSpliter
 
             Console.WriteLine("Enter the path to the dictionary file");
             string dictionaryPath = Console.ReadLine();
-
-            HashSet<string> dictionary = new HashSet<string>();
-            List<string> testWords = new List<string>();
-            List<string> resultOutput = new List<string>();
-
-            FileProcessing.ReadFromFile(dictionaryPath, dictionary);
-            FileProcessing.ReadFromFile(processedInputPath, testWords);
-
-            WordChecking wordChecking = new WordChecking();
-            wordChecking.setDictionary(dictionary);
-            resultOutput = wordChecking.parseWords(testWords);
-
-            WordWriter wordWriter = new WordWriter();
-
-            wordWriter.SetSource(processedOutputPath);
-
-            foreach(string line in resultOutput)
+            if (File.Exists(processedInputPath) && File.Exists(processedOutputPath)&& File.Exists(dictionaryPath)) 
             {
-                wordWriter.Write(line);
-            }
+                HashSet<string> dictionary = new HashSet<string>();
+                List<string> testWords = new List<string>();
+                List<string> resultOutput = new List<string>();
+                List<string> returnedCollection = new List<string>();
 
-            Console.WriteLine("Done");
-            wordWriter.TearDown();
+                returnedCollection = FileProcessing.ReadFromFile(dictionaryPath);
+                foreach (string word in returnedCollection)
+                {
+                    dictionary.Add(word);
+                }
+
+                returnedCollection = FileProcessing.ReadFromFile(processedInputPath);
+                testWords.AddRange(returnedCollection);
+
+                WordChecking wordChecking = new WordChecking();
+                wordChecking.setDictionary(dictionary);
+                resultOutput = wordChecking.parseWords(testWords);
+
+                WordWriter wordWriter = new WordWriter();
+
+                wordWriter.SetSource(processedOutputPath);
+
+                foreach (string line in resultOutput)
+                {
+                    wordWriter.Write(line);
+                }
+
+                Console.WriteLine("Done");
+                wordWriter.TearDown();
+            }
+            else
+            {
+                Console.WriteLine("Invalid filepath. Please check entered data");
+            }
         }
     }
 }

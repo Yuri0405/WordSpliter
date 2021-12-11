@@ -11,9 +11,9 @@ namespace WordSpliter
         private StreamWriter sw;
                
          public void SetSource(string filepath)
-        {
+         {
             sw = new StreamWriter(filepath, true);
-        }
+         }
         //Write results for word
         public void Write(string line)
         {
